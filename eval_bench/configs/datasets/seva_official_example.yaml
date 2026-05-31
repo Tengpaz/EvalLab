@@ -1,0 +1,17 @@
+type: seva_benchmark
+name: re10k
+root: /data/benchmarks/seva/re10k
+scene_glob: "*"
+transforms_file: transforms.json
+image_dir: images
+split_file: train_test_split_3.json
+num_inputs: 3
+sort_images: true
+image_preprocess:
+  mode: center_crop
+  size: 576
+metric_postprocess:
+  resize_short: null
+  resize_exact: null
+  center_crop: false
+  mismatch: error

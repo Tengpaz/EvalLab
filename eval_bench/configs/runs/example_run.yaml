@@ -1,0 +1,40 @@
+run_name: my_model_re10k_p3
+seed: 123
+output_root: outputs
+dataset:
+  type: seva_benchmark
+  name: re10k
+  root: /data/benchmarks/seva/re10k
+  split_file: train_test_split_3.json
+  num_inputs: 3
+  sort_images: true
+  image_preprocess:
+    mode: center_crop
+    size: 576
+  metric_postprocess:
+    resize_short: null
+    resize_exact: null
+    center_crop: false
+    mismatch: error
+model:
+  type: python
+  name: my_model
+  adapter: adapters/example_model_adapter.py:ExampleModelAdapter
+  weights: /path/to/model_weights.ckpt
+  config: /path/to/model_config.yaml
+  device: cuda:0
+  extra_args:
+    cfg: 6.0
+    camera_scale: 1.0
+inference:
+  batch_size: 1
+  overwrite: false
+  resume: true
+  continue_on_error: true
+  save_inputs_for_debug: true
+metrics:
+  enabled: [psnr, ssim, lpips]
+  lpips_net: alex
+  lpips_device: cuda:0
+  skip_unavailable: true
+  image_range: [0, 1]

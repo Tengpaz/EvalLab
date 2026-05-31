@@ -1,0 +1,16 @@
+type: generic_transforms
+name: tiny_smoke
+root: outputs/tiny_dataset
+scene_glob: "*"
+transforms_file: transforms.json
+image_dir: images
+split_file: train_test_split_1.json
+sort_images: true
+num_inputs: 1
+image_preprocess:
+  mode: none
+metric_postprocess:
+  resize_short: null
+  resize_exact: null
+  center_crop: false
+  mismatch: resize_pred_to_gt

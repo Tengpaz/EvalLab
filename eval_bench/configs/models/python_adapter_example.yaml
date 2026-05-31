@@ -1,0 +1,10 @@
+type: python
+name: example_python_adapter
+adapter: adapters/example_model_adapter.py:ExampleModelAdapter
+weights: /path/to/model_weights.ckpt
+config: /path/to/model_config.yaml
+device: cuda:0
+extra_args:
+  cfg: 6.0
+  camera_scale: 1.0
+  mode: copy_first_input

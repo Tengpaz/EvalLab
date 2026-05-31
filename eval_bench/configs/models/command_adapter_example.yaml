@@ -1,0 +1,14 @@
+type: command
+name: example_command_adapter
+command_template: >
+  python /path/to/infer.py
+  --input_images {input_images_json}
+  --input_cameras {input_cameras_json}
+  --target_cameras {target_cameras_json}
+  --weights {weights}
+  --output_dir {output_dir}
+weights: /path/to/weights.ckpt
+config: /path/to/model_config.yaml
+output_pattern: "{target_id}.png"
+env:
+  CUDA_VISIBLE_DEVICES: "0"

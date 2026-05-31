@@ -1,0 +1,22 @@
+run_name: tiny_smoke_python_copy
+seed: 123
+output_root: outputs
+dataset_config: ../datasets/tiny_smoke.yaml
+model:
+  type: python
+  name: tiny_copy_mock
+  adapter: adapters/example_model_adapter.py:ExampleModelAdapter
+  device: cpu
+  extra_args:
+    mode: copy_first_input
+inference:
+  batch_size: 1
+  overwrite: true
+  resume: true
+  continue_on_error: false
+  save_inputs_for_debug: true
+metrics:
+  enabled: [psnr, ssim]
+  image_range: [0, 1]
+  metric_postprocess:
+    mismatch: resize_pred_to_gt

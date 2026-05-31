@@ -1,0 +1,18 @@
+type: generic_transforms
+name: my_transforms_dataset
+root: /data/my_dataset
+scene_glob: "*"
+transforms_file: transforms.json
+image_dir: images
+sort_images: true
+num_inputs: 3
+auto_split:
+  strategy: first_k_as_input
+  k: 3
+image_preprocess:
+  mode: none
+metric_postprocess:
+  resize_short: null
+  resize_exact: null
+  center_crop: false
+  mismatch: resize_pred_to_gt

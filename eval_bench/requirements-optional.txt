@@ -1,0 +1,6 @@
+# Optional packages for JPEG support and paper-grade metrics.
+Pillow>=10.0
+numpy>=1.24
+scikit-image>=0.22
+torch
+lpips
