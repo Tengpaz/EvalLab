@@ -1,0 +1,55 @@
+# Model config for EasyLab-JiT MiraMiniTransformer (PRoPE variant).
+#
+# Architecture: MiraMini-L/16 with official PRoPE camera encoding
+#   depth=24, hidden_size=1024, num_heads=16, patch_size=16
+#   Trained on DL3DV at 256×256 with 8 views per scene.
+#
+# Training config: configs/mira_mini_transformer_prope/dl3dv_mira_mini_prope.py
+# Checkpoint path: EasyLab-JiT/outputs/mira_mini_prope/dl3dv_mira_mini_prope_l16/ckpts/step_XXXXXXX.pt
+
+type: python
+name: mira_mini_prope
+adapter: adapters/mira_mini_adapter.py:MiraMiniAdapter
+
+# Path to the trained checkpoint (.pt file from EasyLab-JiT native backend).
+weights: /mnt/pfs/users/huangzehuan/projects/wangyuzhen/EasyLab-JiT/outputs/mira_mini_prope/dl3dv_mira_mini_prope_l16/ckpts/final.pt
+
+device: cuda:0
+
+extra_args:
+  # Absolute path to the EasyLab-JiT repository root (added to sys.path at runtime).
+  easylab_path: /mnt/pfs/users/huangzehuan/projects/wangyuzhen/EasyLab-JiT
+
+  # Model variant selector.
+  model_type: mira_mini_prope
+
+  # Image resolution; must match the resolution the model was trained at.
+  img_size: 256
+
+  # Number of Euler ODE integration steps.
+  num_sampling_steps: 50
+
+  # Inference dtype: "float32" or "bfloat16".
+  dtype: float32
+
+  # Model architecture parameters (must match the checkpoint).
+  model_params:
+    patch_size: 16
+    in_channels: 3
+    hidden_size: 1024
+    depth: 24
+    num_heads: 16
+    mlp_ratio: 4.0
+    num_views: 8
+    bottleneck_dim: 128
+    attn_drop: 0.0
+    proj_drop: 0.0
+
+  # Flow-matching parameters (must match the training config).
+  diffusion_params:
+    pred_mode: x0_to_v
+    t_schedule: logit_normal
+    P_mean: 0.8
+    P_std: 0.8
+    t_eps: 0.05
+    noise_scale: 2.0

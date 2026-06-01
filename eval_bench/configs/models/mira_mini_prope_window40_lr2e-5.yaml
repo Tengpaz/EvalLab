@@ -1,0 +1,43 @@
+# Model config for EasyLab-JiT MiraMiniTransformer (PRoPE, window40, LR fine-tune).
+#
+# Fine-tuned from mira_mini_prope_window40 with a lower learning rate (2e-5),
+# continuing training to 100k steps on DL3DV with SCENE_WINDOW_SIZE=40.
+#
+# Architecture: MiraMini-L/16 with official PRoPE camera encoding
+#   depth=24, hidden_size=1024, num_heads=16, patch_size=16
+#
+# Training config: configs/mira_mini_transformer_prope/dl3dv_mira_mini_prope_window40_lr2e-5.py
+# Checkpoint path: outputs/mira_mini_prope/dl3dv_mira_mini_prope_l16_window40_lr2e-5/ckpts/final.pt
+
+type: python
+name: mira_mini_prope_window40_lr2e-5
+adapter: adapters/mira_mini_adapter.py:MiraMiniAdapter
+
+weights: /mnt/pfs/users/huangzehuan/projects/wangyuzhen/EasyLab-JiT/outputs/mira_mini_prope/dl3dv_mira_mini_prope_l16_window40_lr2e-5/ckpts/final.pt
+
+device: cuda:0
+
+extra_args:
+  easylab_path: /mnt/pfs/users/huangzehuan/projects/wangyuzhen/EasyLab-JiT
+  model_type: mira_mini_prope
+  img_size: 256
+  num_sampling_steps: 50
+  dtype: float32
+  model_params:
+    patch_size: 16
+    in_channels: 3
+    hidden_size: 1024
+    depth: 24
+    num_heads: 16
+    mlp_ratio: 4.0
+    num_views: 8
+    bottleneck_dim: 128
+    attn_drop: 0.0
+    proj_drop: 0.0
+  diffusion_params:
+    pred_mode: x0_to_v
+    t_schedule: logit_normal
+    P_mean: 0.8
+    P_std: 0.8
+    t_eps: 0.05
+    noise_scale: 2.0

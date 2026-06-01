@@ -1,0 +1,70 @@
+# Evaluation run: MiraMini-PRoPE-Window40 on the SEVA re10k benchmark.
+#
+# Same as mira_mini_prope_seva_re10k.yaml but uses the window40 checkpoint,
+# which was trained for longer (100k steps) with a wider temporal window.
+#
+# View-count constraint: num_inputs + num_targets must equal num_views (8).
+#
+# Usage:
+#   cd eval_bench
+#   python scripts/run_inference.py --run-config configs/runs/mira_mini_prope_window40_seva_re10k.yaml
+
+run_name: mira_mini_prope_window40_seva_re10k_p3
+seed: 42
+output_root: outputs
+
+dataset:
+  type: seva_benchmark
+  name: re10k
+  root: /data/benchmarks/seva/re10k
+  split_file: train_test_split_3.json
+  num_inputs: 3
+  sort_images: true
+  image_preprocess:
+    mode: center_crop
+    size: 256
+
+model:
+  type: python
+  name: mira_mini_prope_window40
+  adapter: adapters/mira_mini_adapter.py:MiraMiniAdapter
+  weights: /mnt/pfs/users/huangzehuan/projects/wangyuzhen/EasyLab-JiT/outputs/mira_mini_prope/dl3dv_mira_mini_prope_l16_window40/ckpts/final.pt
+  device: cuda:0
+  extra_args:
+    easylab_path: /mnt/pfs/users/huangzehuan/projects/wangyuzhen/EasyLab-JiT
+    model_type: mira_mini_prope
+    img_size: 256
+    num_sampling_steps: 50
+    dtype: float32
+    model_params:
+      patch_size: 16
+      in_channels: 3
+      hidden_size: 1024
+      depth: 24
+      num_heads: 16
+      mlp_ratio: 4.0
+      num_views: 8
+      bottleneck_dim: 128
+      attn_drop: 0.0
+      proj_drop: 0.0
+    diffusion_params:
+      pred_mode: x0_to_v
+      t_schedule: logit_normal
+      P_mean: 0.8
+      P_std: 0.8
+      t_eps: 0.05
+      noise_scale: 2.0
+
+inference:
+  batch_size: 1
+  overwrite: false
+  resume: true
+  continue_on_error: true
+  save_inputs_for_debug: false
+
+metrics:
+  enabled: [psnr, ssim, lpips]
+  lpips_net: alex
+  lpips_device: cuda:0
+  skip_unavailable: true
+  image_range: [0, 1]
